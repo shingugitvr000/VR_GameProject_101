@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ProjectileMove : MonoBehaviour
 {
+    public enum PROJECTILETYPE              //총알 타입 구분을 위해 Enum 선언
+    {
+        PLAYER,
+        ENEMY
+    }
+
     public Vector3 launchDirection;
+    public PROJECTILETYPE projectileType = PROJECTILETYPE.PLAYER;   //총알 타입 선언
 
     private void OnCollisionEnter(Collision collision)
     {   //벽에 충돌시 파괴
@@ -28,10 +36,18 @@ public class ProjectileMove : MonoBehaviour
             Destroy(this.gameObject);
         }
         //몬스터에 충돌시
-        if (other.gameObject.tag == "Monster")
+        if (other.gameObject.tag == "Monster" && projectileType == PROJECTILETYPE.PLAYER)
         {
             //몬스터에게 데미지를 주고 사라진다. 
             other.gameObject.GetComponent<MonsterController>().Damanged(1);
+            other.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0.5f), 0.1f, 10, 1);
+            Destroy(this.gameObject);
+        }
+
+        if (other.gameObject.tag == "Player" && projectileType == PROJECTILETYPE.ENEMY)
+        {
+            //플레이어게 데미지를 주고 사라진다. 
+            other.gameObject.GetComponent<PlayerController>().Damanged(1);
             Destroy(this.gameObject);
         }
     }

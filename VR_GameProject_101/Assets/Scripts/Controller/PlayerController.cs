@@ -10,6 +10,17 @@ public class PlayerController : MonoBehaviour
     Vector3 velocity;                                   //이동 방향 벡터를 선언 
     public ProjectileController projectileController;   //발사체 클래스 선언
 
+    public int Player_Hp = 50;                          //플레이어 HP 선언
+    public void Damanged(int Damage)                    //데미지 받는 함수 생성
+    {
+        Player_Hp -= Damage;                            //받은 데미지 HP에 반영
+
+        if (Player_Hp < 0)                              //0 이하로 떨어질시
+        {
+            Destroy(this.gameObject);                   //플레이어 오브젝트 파괴
+        }
+    }
+
     void Start()
     {
         viewCamera = Camera.main;                       //메인 카메라를 가져오기 위해서 start에서 찾아서 입력
